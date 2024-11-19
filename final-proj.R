@@ -1,7 +1,7 @@
 # Final Project 611
 
 # 1. Simulate data
-set.seed(5)
+set.seed(50)
 n <- 5000
 #Create predictor columns
 simdata <- as.data.frame(matrix(rnorm(n * 15), nrow = n, ncol = 15))
@@ -38,9 +38,9 @@ for(k in 1:n_x){
   remain_vars <- remain_vars[-bestvar_n]
   selected_models[[k]] <- mod
 }
-selected_BIC <- sapply(selected_models, function(x) BIC(x))
-minBIC_i <- which.min(selected_BIC)
-bestmod <- summary(selected_models[[minBIC_i]])
+selected_AIC <- sapply(selected_models, function(x) AIC(x))
+minAIC_i <- which.min(selected_AIC)
+bestmod <- summary(selected_models[[minAIC_i]])
 bestmod$coefficients[-1, 4]
 
 
