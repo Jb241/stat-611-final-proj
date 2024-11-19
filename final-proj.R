@@ -66,8 +66,3 @@ hypothesis_test <- function(model) {
     print("Fail to reject the null hypothesis that all \u03B2s=0.")
   }
 }
-
-# 4. Implement
-set.seed(50)
-simdata <- simulate_data(5000, 30)
-hypothesis_test(forward_stepwise(simdata))
