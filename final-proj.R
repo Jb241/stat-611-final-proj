@@ -3,11 +3,10 @@
 # 1. Simulate data
 set.seed(50)
 n <- 5000
+p <- 30
 #Create predictor columns
-simdata <- as.data.frame(matrix(rnorm(n * 15), nrow = n, ncol = 15))
-colnames(simdata) <- c("X1", "X2", "X3", "X4", "X5", 
-                       "X6", "X7", "X8", "X9", "X10", 
-                       "X11", "X12", "X13", "X14", "X15")
+simdata <- as.data.frame(matrix(rnorm(n * p), nrow = n, ncol = p))
+colnames(simdata) <- paste("X", 1:p, sep="")
 #Create outcome column
 Y <- rnorm(n)
 simdata <- cbind(Y, simdata)
@@ -39,6 +38,8 @@ for(k in 1:n_x){
   selected_models[[k]] <- mod
 }
 selected_AIC <- sapply(selected_models, function(x) AIC(x))
+null_AIC <- AIC(null)
+selected_AIC <- c(null_AIC, selected_AIC)
 minAIC_i <- which.min(selected_AIC)
 bestmod <- summary(selected_models[[minAIC_i]])
 bestmod$coefficients[-1, 4]
