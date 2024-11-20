@@ -29,7 +29,11 @@ test_that("forward stepwise selects correct model", {
     set.seed(55)
     
     #Standard case
-    data <- simulate_data(5000, 3)
+    Y <- rnorm(5000)
+    X1 <- rnorm(5000)
+    X2 <- rnorm(5000)
+    X3 <- rnorm(5000)
+    data <- data.frame(Y, X1, X2, X3)
     selected <- forward_stepwise(data)
     
     #Output type is correct
@@ -41,15 +45,19 @@ test_that("forward stepwise selects correct model", {
     #Error if wrong input type
     expect_error(forward_stepwise(c(1, 5, 7, 3, 5)))
     
-    #Edge case of 0 predictors
-    data_p0 <- simulate_data(5000, 0)
-    selected_p0 <- forward_stepwise(data_p0)
-    expect_equal(nrow(selected_p0$coefficients), 1)
+    #Edge case of null model
+    Y <- rnorm(5000)
+    data_null <- data.frame(Y)
+    selected_null <- forward_stepwise(data_null)
+    expect_equal(nrow(selected_null$coefficients), 1)
     
     #Simple case with one very good predictor
-    data_simple <- simulate_data(5000, 3)
-    X4 <- data_simple[[1]] + rnorm(5000, sd = 0.01)
-    data_simple <- cbind(data_simple, X4)
+    Y <- rnorm(5000)
+    X1 <- rnorm(5000)
+    X2 <- rnorm(5000)
+    X3 <- rnorm(5000)
+    X4 <- Y + + rnorm(5000, sd = 0.01)
+    data_simple <- data.frame(Y, X1, X2, X3, X4)
     selected_simple <- forward_stepwise(data_simple)
     expect_equal(rownames(selected_simple$coefficients)[2], "X4")
     expect_true(selected_simple$coefficients["X4", "Pr(>|t|)"] < 0.001)
@@ -62,8 +70,9 @@ test_that("hypothesis test works", {
   expect_error(hypothesis_test(c(3, 5, 7, 3, 6, 5)))
   
   #Edge case of null model
-  data <- simulate_data(5000, 0)
-  selected <- forward_stepwise(data)
+  Y <- rnorm(5000)
+  data_null <- data.frame(Y)
+  selected <- forward_stepwise(data_null)
   expect_error(hypothesis_test(selected))
   
   #Simple case with one random, non-associated predictor
