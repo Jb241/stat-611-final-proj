@@ -1,11 +1,5 @@
 # Final Project 611
 
-full_forward_stepwise <- function(n, p){
-  simdata <- simulate_data(n, p)
-  bestmodel <- forward_stepwise(simdata)
-  return(hypothesis_test(bestmodel))
-}
-
 # 1. Simulate data function
 simulate_data <- function(n, p){
   #Create predictor columns
