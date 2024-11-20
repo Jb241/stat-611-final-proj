@@ -16,5 +16,6 @@ test_that("data frame simulated with no associations", {
     expect_true(is.numeric(data$Y))
     expect_true(is.numeric(data$X1))
     expect_error(simulate_data(0, 10))
+    expect_error(simulate_data(10, -1))
 })
 

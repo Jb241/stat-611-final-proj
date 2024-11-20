@@ -3,7 +3,10 @@
 # 1. Simulate data function
 simulate_data <- function(n, p){
   if (n <= 0) {
-    stop("Error: The input 'n' must be a positive number. You provided n = ", p)
+    stop("Error: The input 'n' must be a positive number. You provided p = ", p)
+  }
+  if (p < 0) {
+    stop("Error: The input 'n' must not be a negative number. You provided n = ", n)
   }
   #Create predictor columns
   simdata <- as.data.frame(matrix(rnorm(n * p), nrow = n, ncol = p))
