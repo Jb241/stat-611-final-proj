@@ -4,5 +4,9 @@ library(testthat)
 test_dir(".")
 
 #Implement for project
-set.seed(50)
-full_forward_stepwise(5000, 30)
+set.seed(55)
+data <- simulate_data(5000, 30)
+best_model <- forward_stepwise(data)
+hypothesis_test(best_model)
+which_xs_sig <- hypothesis_test(best_model)
+which_xs_sig
