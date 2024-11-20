@@ -73,12 +73,20 @@ forward_stepwise <- function(data) {
 
 # 3. Hypothesis testing function
 hypothesis_test <- function(model) {
+  if (class(model) != "summary.lm"){
+    stop("Error: The input 'model' must be an lm summary object.")
+  }
+  if (nrow(model$coefficients) <= 1) {
+    stop("Error: The model provided has no \u03B2s to test.")
+  }
   ps <- model$coefficients[-1, 4]
   if (any(ps < 0.05)) {
     cat("Reject the null that all \u03B2s=0.")
-    return(names(ps[ps < 0.05]))
+    sig_vars <- rownames(model$coefficients)[ps < 0.05]
+    sig_vars <- sig_vars[sig_vars != "(Intercept)"]
+    invisible(sig_vars)
   }
   else{
-    print("Fail to reject the null hypothesis that all \u03B2s=0.")
+    cat("Fail to reject the null hypothesis that all \u03B2s=0.")
   }
 }

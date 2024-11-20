@@ -3,7 +3,7 @@ context("Check forward stepwise model selection")
 source("final-proj-fn.R")
 
 test_that("data frame simulated with no associations", {
-    set.seed(45)
+    set.seed(55)
   
     #Simple case, X1 should not be related to Y
     data <- simulate_data(300, 1)
@@ -26,7 +26,7 @@ test_that("data frame simulated with no associations", {
 })
 
 test_that("forward stepwise selects correct model", {
-    set.seed(45)
+    set.seed(55)
     
     #Standard case
     data <- simulate_data(5000, 3)
@@ -55,3 +55,38 @@ test_that("forward stepwise selects correct model", {
     expect_true(selected_simple$coefficients["X4", "Pr(>|t|)"] < 0.001)
 })
 
+test_that("hypothesis test works", {
+  set.seed(55)
+  
+  #Handling wrong input type
+  expect_error(hypothesis_test(c(3, 5, 7, 3, 6, 5)))
+  
+  #Edge case of null model
+  data <- simulate_data(5000, 0)
+  selected <- forward_stepwise(data)
+  expect_error(hypothesis_test(selected))
+  
+  #Simple case with one random, non-associated predictor
+  Y <- rnorm(5000)
+  X1 <- rnorm(5000)
+  data_simple1 <- data.frame(Y, X1)
+  model <- lm(Y ~ 1 + X1, data=data_simple1)
+  model_sum <- summary(model)
+  output <- capture.output(hypothesis_test(model_sum))
+  expect_equal(output, 
+               "Fail to reject the null hypothesis that all \u03B2s=0.")
+  result <- hypothesis_test(model_sum)
+  expect_equal(result, NULL)
+  
+  #Simple case with one very good predictor
+  Y <- rnorm(5000)
+  X1 <- Y + rnorm(5000, sd = 0.01)
+  data_simple2 <- data.frame(Y, X1)
+  model <- lm(Y ~ 1 + X1, data=data_simple2)
+  model_sum <- summary(model)
+  output <- capture.output(hypothesis_test(model_sum))
+  expect_equal(output, 
+               "Reject the null that all \u03B2s=0.")
+  result <- hypothesis_test(model_sum)
+  expect_equal(result, "X1")
+})
