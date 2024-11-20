@@ -8,7 +8,11 @@ simulate_data <- function(n, p){
   if (p < 0) {
     stop("Error: The input 'n' must not be a negative number. You provided n = ", n)
   }
-  #Create predictor columns
+  if (p==0){
+    Y <- rnorm(n)
+    simdata <- as.data.frame(Y)
+    return(simdata)
+  }
   simdata <- as.data.frame(matrix(rnorm(n * p), nrow = n, ncol = p))
   colnames(simdata) <- paste("X", 1:p, sep="")
   #Create outcome column
@@ -20,8 +24,14 @@ simulate_data <- function(n, p){
 
 # 2. Forward step-wise selection function
 forward_stepwise <- function(data) {
+  if (class(data) != "data.frame") {
+    stop("Error: The input 'data' must be a data frame.")
+  }
   #Null model
   null <- lm(Y ~ 1, data = data)
+  if (ncol(data) == 1) {
+    return(summary(null))
+  }
   #Set up variables
   vars <- colnames(data)[-1]
   n_x <- length(vars)

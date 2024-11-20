@@ -19,3 +19,22 @@ test_that("data frame simulated with no associations", {
     expect_error(simulate_data(10, -1))
 })
 
+test_that("forward stepwise selects correct model", {
+    set.seed(45)
+    data <- simulate_data(5000, 3)
+    selected <- forward_stepwise(data)
+    expect_is(selected, "summary.lm")
+    expect_true(all(selected$coefficients[, "Estimate"] != 0))
+    expect_error(forward_stepwise(c(1, 5, 7, 3, 5)))
+    
+    data_p0 <- simulate_data(5000, 0)
+    selected_p0 <- forward_stepwise(data_p0)
+    expect_equal(nrow(selected_p0$coefficients), 1)
+    
+    data_simple <- simulate_data(5000, 3)
+    data_simple <- cbind(data_simple, data_simple[[1]])
+    colnames(data_simple)[5] <- "X4"
+    selected_simple <- forward_stepwise(data_simple)
+    expect_equal(rownames(selected_simple$coefficients)[2], "X4")
+    expect_true(selected_simple$coefficients["X4", "Pr(>|t|)"] < 0.001)
+})
