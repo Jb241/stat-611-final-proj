@@ -2,6 +2,9 @@
 
 # 1. Simulate data function
 simulate_data <- function(n, p){
+  if (n <= 0) {
+    stop("Error: The input 'n' must be a positive number. You provided n = ", p)
+  }
   #Create predictor columns
   simdata <- as.data.frame(matrix(rnorm(n * p), nrow = n, ncol = p))
   colnames(simdata) <- paste("X", 1:p, sep="")
