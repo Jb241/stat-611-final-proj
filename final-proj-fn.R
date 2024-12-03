@@ -89,5 +89,6 @@ hypothesis_test <- function(model) {
   }
   else{
     cat("Fail to reject the null hypothesis that all \u03B2s=0.")
+    invisible(ps)
   }
 }
