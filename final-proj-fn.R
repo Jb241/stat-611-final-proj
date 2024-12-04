@@ -80,10 +80,10 @@ hypothesis_test <- function(model) {
     stop("Error: The model provided has no \u03B2s to test.")
   }
   ps <- model$coefficients[-1, 4]
-  names(ps) <- rownames(model$coefficients)[-1]
   if (any(ps < 0.05)) {
     cat("Reject the null that all \u03B2s=0.")
-    sig_vars <- rownames(model$coefficients)[ps < 0.05]
+    vars <- rownames(model$coefficients)[-1]
+    sig_vars <- vars[ps < 0.05]
     sig_vars <- sig_vars[sig_vars != "(Intercept)"]
     invisible(list("Significant variables" = sig_vars, "P-values" = ps))
   }

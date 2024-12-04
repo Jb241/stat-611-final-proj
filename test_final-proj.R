@@ -85,7 +85,8 @@ test_that("hypothesis test works", {
   expect_equal(output, 
                "Fail to reject the null hypothesis that all \u03B2s=0.")
   result <- hypothesis_test(model_sum)
-  expect_equal(result, NULL)
+  expect_true(length(result) == 1)
+  expect_true(result >= 0.05)
   
   #Simple case with one very good predictor
   Y <- rnorm(5000)
@@ -97,5 +98,7 @@ test_that("hypothesis test works", {
   expect_equal(output, 
                "Reject the null that all \u03B2s=0.")
   result <- hypothesis_test(model_sum)
-  expect_equal(result, "X1")
+  expect_equal(result[[1]], "X1")
+  expect_true(result[[2]] < 0.05)
+  
 })
