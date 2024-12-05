@@ -23,6 +23,9 @@ test_that("data frame simulated with no associations", {
     #Edge cases
     expect_error(simulate_data(0, 10))
     expect_error(simulate_data(10, -1))
+    data2 <- simulate_data(300, 0)
+    expect_equal(ncol(data2), 1)
+    expect_equal(colnames(data2)[1], "Y")
 })
 
 test_that("forward stepwise selects correct model", {
