@@ -59,7 +59,7 @@ test_that("forward stepwise selects correct model", {
     X1 <- rnorm(5000)
     X2 <- rnorm(5000)
     X3 <- rnorm(5000)
-    X4 <- Y + + rnorm(5000, sd = 0.01)
+    X4 <- Y + rnorm(5000, sd = 0.01)
     data_simple <- data.frame(Y, X1, X2, X3, X4)
     selected_simple <- forward_stepwise(data_simple)
     expect_equal(rownames(selected_simple$coefficients)[2], "X4")
